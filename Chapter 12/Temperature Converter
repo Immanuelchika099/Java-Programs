@@ -1,0 +1,61 @@
+//CHAPTER 12.12
+
+package Chapter_12;
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class TemperatureConverter extends JFrame {
+
+    private JTextField fahrenheitField;
+    private JLabel celsiusLabel;
+
+    public TemperatureConverter() {
+        setTitle("Temperature Converter");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new FlowLayout());
+
+        // Create input field for Fahrenheit temperature
+        fahrenheitField = new JTextField(10);
+        add(new JLabel("Fahrenheit:"));
+        add(fahrenheitField);
+
+        // Create button to perform conversion
+        JButton convertButton = new JButton("Convert");
+        convertButton.addActionListener(new ConvertButtonListener());
+        add(convertButton);
+
+        // Create label to display Celsius temperature
+        celsiusLabel = new JLabel("Celsius:");
+        add(celsiusLabel);
+
+        setVisible(true);
+    }
+
+    private class ConvertButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                // Get Fahrenheit temperature from input field
+                double fahrenheit = Double.parseDouble(fahrenheitField.getText());
+
+                // Perform conversion
+                double celsius = (5.0 / 9.0) * (fahrenheit - 32);
+
+                // Display Celsius temperature
+                celsiusLabel.setText("Celsius: " + String.format("%.2f", celsius));
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(TemperatureConverter.this, "Invalid input. Please enter a valid temperature.");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TemperatureConverter());
+    }
+}
