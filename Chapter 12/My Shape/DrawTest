@@ -1,0 +1,9 @@
+package Chapter_12;
+
+public class DrawTest {
+
+    public static void main(String[] args) {
+        DrawFrame frame = new DrawFrame();
+        frame.setVisible(true);
+    }
+}
