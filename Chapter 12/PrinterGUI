@@ -1,0 +1,95 @@
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class PrinterGUI extends JFrame {
+
+    public PrinterGUI() {
+        setTitle("Printer");
+        setSize(400, 250); // Adjusted size
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center on screen
+        setLayout(new BorderLayout()); // Use BorderLayout for better organization
+
+        // Main panel for content
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        add(mainPanel, BorderLayout.CENTER);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Add some padding
+
+        // Printer label and dropdown
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // Span two columns
+        gbc.anchor = GridBagConstraints.WEST;
+        mainPanel.add(new JLabel("Printer: MyPrinter"), gbc);
+
+        // Checkboxes (left column)
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1; // Reset to single column
+        mainPanel.add(new JCheckBox("Image"), gbc);
+
+        gbc.gridy = 2;
+        mainPanel.add(new JCheckBox("Text"), gbc);
+
+        gbc.gridy = 3;
+        mainPanel.add(new JCheckBox("Code"), gbc);
+
+        // Radio buttons (right column)
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        mainPanel.add(new JRadioButton("Selection"), gbc);
+
+        gbc.gridy = 2;
+        mainPanel.add(new JRadioButton("All", true), gbc); // "All" is selected by default
+
+        gbc.gridy = 3;
+        mainPanel.add(new JRadioButton("Applet"), gbc);
+
+        // Print Quality label and dropdown
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        mainPanel.add(new JLabel("Print Quality:"), gbc);
+
+        gbc.gridx = 1;
+        String[] qualityOptions = {"High", "Medium", "Low"}; // Example options
+        JComboBox<String> qualityDropdown = new JComboBox<>(qualityOptions);
+        mainPanel.add(qualityDropdown, gbc);
+
+        // Print to File checkbox
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        mainPanel.add(new JCheckBox("Print to File"), gbc);
+
+        // Buttons (right side)
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS)); // Vertical layout
+
+        JButton okButton = new JButton("OK");
+        JButton cancelButton = new JButton("Cancel");
+        JButton setupButton = new JButton("Setup...");
+        JButton helpButton = new JButton("Help");
+
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(setupButton);
+        buttonPanel.add(helpButton);
+
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.gridheight = 5; // Span all rows
+        gbc.fill = GridBagConstraints.VERTICAL; // Fill vertically
+        gbc.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(buttonPanel, gbc);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new PrinterGUI());
+    }
+}
