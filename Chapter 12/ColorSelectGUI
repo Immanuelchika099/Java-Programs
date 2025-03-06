@@ -1,0 +1,44 @@
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class ColorSelectGUI extends JFrame {
+
+    public ColorSelectGUI() {
+        setTitle("ColorSelect");
+        setSize(300, 150); // Adjusted size
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center on screen
+        setLayout(new BorderLayout()); // Use BorderLayout for better organization
+
+        // Panel for color selection and dropdown
+        JPanel colorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        String[] colorOptions = {"RED", "GREEN", "BLUE"}; // Example color options
+        JComboBox<String> colorDropdown = new JComboBox<>(colorOptions);
+        colorPanel.add(colorDropdown);
+        add(colorPanel, BorderLayout.NORTH);
+
+        // Panel for checkboxes
+        JPanel checkboxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JCheckBox backgroundCheckBox = new JCheckBox("Background");
+        JCheckBox foregroundCheckBox = new JCheckBox("Foreground");
+        checkboxPanel.add(backgroundCheckBox);
+        checkboxPanel.add(foregroundCheckBox);
+        add(checkboxPanel, BorderLayout.CENTER);
+
+        // Panel for buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton okButton = new JButton("Ok");
+        JButton cancelButton = new JButton("Cancel");
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ColorSelectGUI());
+    }
+}
