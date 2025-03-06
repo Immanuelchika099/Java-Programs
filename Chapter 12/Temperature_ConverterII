@@ -1,0 +1,95 @@
+//CHAPTER 12.13
+
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Temperature_ConverterII extends JFrame {
+
+    private JTextField inputField;
+    private JComboBox<String> inputUnitComboBox;
+    private JComboBox<String> outputUnitComboBox;
+    private JLabel outputLabel;
+
+    public Temperature_ConverterII() {
+        setTitle("Temperature Converter");
+        setSize(350, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new FlowLayout());
+
+        // Create input field
+        inputField = new JTextField(10);
+        add(new JLabel("Input Temperature:"));
+        add(inputField);
+
+        // Create input unit combo box
+        String[] units = {"Fahrenheit", "Celsius", "Kelvin"};
+        inputUnitComboBox = new JComboBox<>(units);
+        add(new JLabel("Input Unit:"));
+        add(inputUnitComboBox);
+
+        // Create output unit combo box
+        outputUnitComboBox = new JComboBox<>(units);
+        add(new JLabel("Output Unit:"));
+        add(outputUnitComboBox);
+
+        // Create button to perform conversion
+        JButton convertButton = new JButton("Convert");
+        convertButton.addActionListener(new ConvertButtonListener());
+        add(convertButton);
+
+        // Create label to display output
+        outputLabel = new JLabel("Output Temperature:");
+        add(outputLabel);
+
+        setVisible(true);
+    }
+
+    private class ConvertButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                // Get input temperature and units
+                double inputTemperature = Double.parseDouble(inputField.getText());
+                String inputUnit = (String) inputUnitComboBox.getSelectedItem();
+                String outputUnit = (String) outputUnitComboBox.getSelectedItem();
+
+                // Perform conversion
+                double outputTemperature = convertTemperature(inputTemperature, inputUnit, outputUnit);
+
+                // Display output temperature
+                outputLabel.setText("Output Temperature: " + String.format("%.2f", outputTemperature) + " " + outputUnit);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(Temperature_ConverterII.this, "Invalid input. Please enter a valid temperature.");
+            }
+        }
+    }
+
+    private double convertTemperature(double inputTemperature, String inputUnit, String outputUnit) {
+        double outputTemperature = inputTemperature;
+
+        // Convert to Celsius
+        if (inputUnit.equals("Fahrenheit")) {
+            outputTemperature = (5.0 / 9.0) * (outputTemperature - 32);
+        } else if (inputUnit.equals("Kelvin")) {
+            outputTemperature -= 273.15;
+        }
+
+        // Convert from Celsius
+        if (outputUnit.equals("Fahrenheit")) {
+            outputTemperature = (9.0 / 5.0) * outputTemperature + 32;
+        } else if (outputUnit.equals("Kelvin")) {
+            outputTemperature += 273.15;
+        }
+
+        return outputTemperature;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Temperature_ConverterII());
+    }
+}
