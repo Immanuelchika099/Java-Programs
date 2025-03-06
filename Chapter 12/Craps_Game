@@ -1,0 +1,105 @@
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
+
+public class CrapsGame extends JFrame {
+
+    private JTextField die1Field;
+    private JTextField die2Field;
+    private JTextField sumField;
+    private JTextField pointField;
+    private int point;
+
+    public CrapsGame() {
+        setTitle("Craps Game");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        // Create labels and text fields
+        add(new JLabel("Die 1:"));
+        die1Field = new JTextField(5);
+        die1Field.setEditable(false);
+        add(die1Field);
+
+        add(new JLabel("Die 2:"));
+        die2Field = new JTextField(5);
+        die2Field.setEditable(false);
+        add(die2Field);
+
+        add(new JLabel("Sum:"));
+        sumField = new JTextField(5);
+        sumField.setEditable(false);
+        add(sumField);
+
+        add(new JLabel("Point:"));
+        pointField = new JTextField(5);
+        pointField.setEditable(false);
+        add(pointField);
+
+        // Create button to roll dice
+        JButton rollButton = new JButton("Roll Dice");
+        rollButton.addActionListener(new RollButtonListener());
+        add(rollButton);
+
+        setVisible(true);
+    }
+
+    private class RollButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Roll the dice
+            Random random = new Random();
+            int die1 = random.nextInt(6) + 1;
+            int die2 = random.nextInt(6) + 1;
+            int sum = die1 + die2;
+
+            // Display the results
+            die1Field.setText(String.valueOf(die1));
+            die2Field.setText(String.valueOf(die2));
+            sumField.setText(String.valueOf(sum));
+
+            // Determine the outcome
+            if (sum == 7 || sum == 11) {
+                JOptionPane.showMessageDialog(CrapsGame.this, "You win!");
+                pointField.setText("");
+            } else if (sum == 2 || sum == 3 || sum == 12) {
+                JOptionPane.showMessageDialog(CrapsGame.this, "You lose!");
+                pointField.setText("");
+            } else {
+                point = sum;
+                pointField.setText(String.valueOf(point));
+                while (true) {
+                    // Roll the dice again
+                    die1 = random.nextInt(6) + 1;
+                    die2 = random.nextInt(6) + 1;
+                    sum = die1 + die2;
+
+                    // Display the results
+                    die1Field.setText(String.valueOf(die1));
+                    die2Field.setText(String.valueOf(die2));
+                    sumField.setText(String.valueOf(sum));
+
+                    // Determine the outcome
+                    if (sum == point) {
+                        JOptionPane.showMessageDialog(CrapsGame.this, "You win!");
+                        pointField.setText("");
+                        break;
+                    } else if (sum == 7) {
+                        JOptionPane.showMessageDialog(CrapsGame.this, "You lose!");
+                        pointField.setText("");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new CrapsGame());
+    }
+}
