@@ -1,0 +1,71 @@
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class DrawFrame extends JFrame {
+
+    public static void main(String [] args) {
+        SwingUtilities.invokeLater(() -> {
+            DrawFrame frame = new DrawFrame();
+            frame.setVisible(true);
+        });
+    }
+    private DrawPanel drawPanel;
+    private JLabel statusLabel;
+
+    public DrawFrame() {
+        setTitle("Java Drawings");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        statusLabel = new JLabel("(0, 0)");
+        drawPanel = new DrawPanel(statusLabel);
+
+        JPanel topPanel = new JPanel();
+
+        JButton undoButton = new JButton("Undo");
+        JButton clearButton = new JButton("Clear");
+        JComboBox<String> colorComboBox = new JComboBox<>(new String[]{"Black", "Red", "Green", "Blue", /* ... */});
+        JComboBox<String> shapeComboBox = new JComboBox<>(new String[]{"Line", "Rectangle", "Oval", /* ... */});
+        JCheckBox filledCheckBox = new JCheckBox("Filled");
+
+        undoButton.addActionListener(e -> drawPanel.clearLastShape());
+        clearButton.addActionListener(e -> drawPanel.clearDrawing());
+        colorComboBox.addActionListener(e -> {
+            switch (colorComboBox.getSelectedItem().toString()) {
+                case "Red":
+                    drawPanel.setCurrentColor(Color.RED);
+                    break;
+                // Add cases for other colors
+            }
+        });
+        shapeComboBox.addActionListener(e -> {
+            switch (shapeComboBox.getSelectedItem().toString()) {
+                case "Line":
+                    drawPanel.setShapeType(0);
+                    break;
+                case "Rectangle":
+                    drawPanel.setShapeType(1);
+                    break;
+                case "Oval":
+                    drawPanel.setShapeType(2);
+                    break;
+                // Add cases for other shapes
+            }
+        });
+        filledCheckBox.addActionListener(e -> drawPanel.setFilledShape(filledCheckBox.isSelected()));
+
+        topPanel.add(undoButton);
+        topPanel.add(clearButton);
+        topPanel.add(colorComboBox);
+        topPanel.add(shapeComboBox);
+        topPanel.add(filledCheckBox);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(drawPanel, BorderLayout.CENTER);
+        add(statusLabel, BorderLayout.SOUTH);
+        
+     }
+}
