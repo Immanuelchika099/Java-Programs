@@ -1,0 +1,140 @@
+//CHAPTER 12.15
+
+package Chapter_12;
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+
+public class EventDisplay extends JFrame {
+
+    private JTextArea eventArea;
+
+    public EventDisplay() {
+        setTitle("Event Display");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        eventArea = new JTextArea(10, 30);
+        eventArea.setEditable(false);
+        add(new JScrollPane(eventArea), BorderLayout.CENTER);
+
+        JPanel panel = new JPanel();
+        add(panel, BorderLayout.PAGE_END);
+
+        JButton button = new JButton("Click Me");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logEvent("ActionEvent: " + e.toString());
+            }
+        });
+        panel.add(button);
+
+        JCheckBox checkBox = new JCheckBox("Check Me");
+        checkBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                logEvent("ItemEvent: " + e.toString());
+            }
+        });
+        panel.add(checkBox);
+
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        listModel.addElement("Item 1");
+        listModel.addElement("Item 2");
+        listModel.addElement("Item 3");
+        JList<String> list = new JList<>(listModel);
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                logEvent("ListSelectionEvent: " + e.toString());
+            }
+        });
+        panel.add(new JScrollPane(list));
+
+        JLabel label = new JLabel("Mouse Events");
+        label.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+        });
+        label.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                logEvent("MouseEvent: " + e.toString());
+            }
+        });
+        panel.add(label);
+
+        JTextField textField = new JTextField(10);
+        textField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                logEvent("KeyEvent: " + e.toString());
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                logEvent("KeyEvent: " + e.toString());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                logEvent("KeyEvent: " + e.toString());
+            }
+        });
+        panel.add(textField);
+
+        setVisible(true);
+    }
+    
+
+    private void logEvent(String message) {
+        eventArea.append(message + "\n");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new EventDisplay());
+    }
+}
