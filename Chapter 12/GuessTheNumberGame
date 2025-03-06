@@ -1,0 +1,108 @@
+//CHAPTER 12.14
+
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
+
+public class GuessTheNumberGame extends JFrame {
+
+    private JTextField guessField;
+    private JLabel messageLabel;
+    private int numberToGuess;
+    private int previousGuess;
+
+    public GuessTheNumberGame() {
+        setTitle("Guess-the-Number Game");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new FlowLayout());
+
+        // Generate a random number between 1 and 1000
+        Random random = new Random();
+        numberToGuess = random.nextInt(1000) + 1;
+
+        // Create label to display message
+        messageLabel = new JLabel("I have a number between 1 and 1000. Can you guess my number? Please enter your first guess.");
+        add(messageLabel);
+
+        // Create text field to input guess
+        guessField = new JTextField(10);
+        add(guessField);
+
+        // Create button to submit guess
+        JButton guessButton = new JButton("Guess");
+        guessButton.addActionListener(new GuessButtonListener());
+        add(guessButton);
+
+        // Create button to play again
+        JButton playAgainButton = new JButton("Play Again");
+        playAgainButton.addActionListener(new PlayAgainButtonListener());
+        add(playAgainButton);
+
+        setVisible(true);
+    }
+
+    private class GuessButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                // Get the guess from the text field
+                int guess = Integer.parseInt(guessField.getText());
+
+                // Check if the guess is correct
+                if (guess == numberToGuess) {
+                    messageLabel.setText("Correct!");
+                    guessField.setEditable(false);
+                } else {
+                    // Check if the guess is higher or lower than the previous guess
+                    if (previousGuess != 0) {
+                        if (Math.abs(guess - numberToGuess) < Math.abs(previousGuess - numberToGuess)) {
+                            guessField.setBackground(Color.RED); // Red indicates warmer
+                        } else {
+                            guessField.setBackground(Color.BLUE); // Blue indicates colder
+                        }
+                    }
+
+                    // Update the previous guess
+                    previousGuess = guess;
+
+                    // Display a message to help the user zero in
+                    if (guess < numberToGuess) {
+                        messageLabel.setText("Too Low!");
+                    } else {
+                        messageLabel.setText("Too High!");
+                    }
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(GuessTheNumberGame.this, "Invalid input. Please enter a valid number.");
+            }
+        }
+    }
+
+    private class PlayAgainButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Generate a new random number
+            Random random = new Random();
+            numberToGuess = random.nextInt(1000) + 1;
+
+            // Reset the previous guess
+            previousGuess = 0;
+
+            // Reset the text field and message label
+            guessField.setText("");
+            guessField.setEditable(true);
+            guessField.setBackground(Color.WHITE);
+            messageLabel.setText("I have a number between 1 and 1000. Can you guess my number? Please enter your first guess.");
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new GuessTheNumberGame());
+    }
+}
