@@ -1,0 +1,127 @@
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+
+public class DrawPanel extends JPanel {
+
+    public static void main(String [] args) {
+        JFrame frame = new JFrame("DrawPanel Test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+
+        JLabel statusLabel = new JLabel("(0, 0)");
+        DrawPanel drawPanel = new DrawPanel(statusLabel);
+
+        frame.add(drawPanel, BorderLayout.CENTER);
+        frame.add(statusLabel, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
+    }
+    private ArrayList<MyShape> shapes;
+    private int shapeType;
+    private MyShape currentShape;
+    private Color currentColor;
+    private boolean filledShape;
+    private JLabel statusLabel;
+
+    public DrawPanel(JLabel statusLabel) {
+        this.statusLabel = statusLabel;
+        shapes = new ArrayList<>();
+        shapeType = 0; // Default to line
+        currentShape = null;
+        currentColor = Color.BLACK;
+        filledShape = false;
+
+        setBackground(Color.WHITE);
+
+        MouseHandler handler = new MouseHandler();
+        addMouseListener(handler);
+        addMouseMotionListener(handler);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for (MyShape shape : shapes) {
+            shape.setColor(shape.getColor());//To make sure it has the right color.
+            shape.setFilled(shape.isFilled()); //To make sure it has the right filled status.
+            shape.draw(g);
+        }
+        if (currentShape != null) {
+            currentShape.setColor(currentColor);
+            currentShape.setFilled(filledShape);
+            currentShape.draw(g);
+        }
+    }
+
+    public void setShapeType(int shapeType) {
+        this.shapeType = shapeType;
+    }
+
+    public void setCurrentColor(Color currentColor) {
+        this.currentColor = currentColor;
+    }
+
+    public void setFilledShape(boolean filledShape) {
+        this.filledShape = filledShape;
+    }
+
+    public void clearLastShape() {
+        if (!shapes.isEmpty()) {
+            shapes.remove(shapes.size() - 1);
+            repaint();
+        }
+    }
+
+    public void clearDrawing() {
+        shapes.clear();
+        repaint();
+    }
+
+    private class MouseHandler extends MouseAdapter implements MouseMotionListener {
+
+        @Override
+        public void mousePressed(MouseEvent event) {
+            Point p = event.getPoint();
+            switch (shapeType) {
+                case 0: // Line
+                    currentShape = new Line(p, p, currentColor, filledShape);
+                    break;
+                case 1: // Rectangle
+                    currentShape = new Rectangle(p, p, currentColor, filledShape);
+                    break;
+                case 2: // Oval
+                    currentShape = new Oval(p, p, currentColor, filledShape);
+                    break;
+                // Add cases for other shapes
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent event) {
+            if (currentShape != null) {
+                currentShape.setSecondPoint(event.getPoint());
+                shapes.add(currentShape);
+                currentShape = null;
+                repaint();
+            }
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent event) {
+            statusLabel.setText("(" + event.getX() + ", " + event.getY() + ")");
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent event) {
+            if (currentShape != null) {
+                currentShape.setSecondPoint(event.getPoint());
+                repaint();
+                statusLabel.setText("(" + event.getX() + ", " + event.getY() + ")");
+            }
+        }
+    }
+}
