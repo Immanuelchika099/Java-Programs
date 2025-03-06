@@ -1,0 +1,56 @@
+// CHAPTER 12.8
+
+package Chapter_12;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class AlignGUI extends JFrame {
+
+    public AlignGUI() {
+        setTitle("Align");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center on screen
+        setLayout(new GridLayout(3, 1)); // Use a grid layout for organization
+
+        // Panel for Snap to Grid and X
+        JPanel snapPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JCheckBox snapCheckBox = new JCheckBox("Snap to Grid");
+        JTextField xField = new JTextField(3);
+        xField.setText("8");
+        snapPanel.add(snapCheckBox);
+        snapPanel.add(new JLabel("X:"));
+        snapPanel.add(xField);
+
+        // Panel for Show Grid and Y
+        JPanel showPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JCheckBox showCheckBox = new JCheckBox("Show Grid");
+        JTextField yField = new JTextField(3);
+        yField.setText("8");
+        showPanel.add(showCheckBox);
+        showPanel.add(new JLabel("Y:"));
+        showPanel.add(yField);
+
+        // Panel for Buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton okButton = new JButton("Ok");
+        JButton cancelButton = new JButton("Cancel");
+        JButton helpButton = new JButton("Help");
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(helpButton);
+
+        // Add panels to the frame
+        add(snapPanel);
+        add(showPanel);
+        add(buttonPanel);
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new AlignGUI());
+    }
+}
+
