@@ -1,0 +1,104 @@
+package Chapter_12;
+
+import java.awt.*;
+
+// MyShape.java (as shown above)
+abstract class MyShape {
+    private Point firstPoint;
+    private Point secondPoint;
+    private Color color;
+    private boolean filled;
+
+    public MyShape(Point firstPoint, Point secondPoint, Color color, boolean filled) {
+        this.firstPoint = firstPoint;
+        this.secondPoint = secondPoint;
+        this.color = color;
+        this.filled = filled;
+    }
+
+    public Point getFirstPoint() {
+        return firstPoint;
+    }
+
+    public Point getSecondPoint() {
+        return secondPoint;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public boolean isFilled() {
+        return filled;
+    }
+
+    public void setFirstPoint(Point firstPoint) {
+        this.firstPoint = firstPoint;
+    }
+
+    public void setSecondPoint(Point secondPoint) {
+        this.secondPoint = secondPoint;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setFilled(boolean filled) {
+        this.filled = filled;
+    }
+
+    public abstract void draw(Graphics g);
+}
+// ...
+
+// Line.java
+class Line extends MyShape {
+    public Line(Point firstPoint, Point secondPoint, Color color, boolean filled) {
+        super(firstPoint, secondPoint, color, filled);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.setColor(getColor());
+        g.drawLine(getFirstPoint().x, getFirstPoint().y, getSecondPoint().x, getSecondPoint().y);
+    }
+}
+
+// Rectangle.java
+class Rectangle extends MyShape {
+    public Rectangle(Point firstPoint, Point secondPoint, Color color, boolean filled) {
+        super(firstPoint, secondPoint, color, filled);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.setColor(getColor());
+        if (isFilled()) {
+            g.fillRect(Math.min(getFirstPoint().x, getSecondPoint().x), Math.min(getFirstPoint().y, getSecondPoint().y),
+                    Math.abs(getFirstPoint().x - getSecondPoint().x), Math.abs(getFirstPoint().y - getSecondPoint().y));
+        } else {
+            g.drawRect(Math.min(getFirstPoint().x, getSecondPoint().x), Math.min(getFirstPoint().y, getSecondPoint().y),
+                    Math.abs(getFirstPoint().x - getSecondPoint().x), Math.abs(getFirstPoint().y - getSecondPoint().y));
+        }
+    }
+}
+
+// Oval.java
+class Oval extends MyShape {
+    public Oval(Point firstPoint, Point secondPoint, Color color, boolean filled) {
+        super(firstPoint, secondPoint, color, filled);
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        g.setColor(getColor());
+        if (isFilled()) {
+            g.fillOval(Math.min(getFirstPoint().x, getSecondPoint().x), Math.min(getFirstPoint().y, getSecondPoint().y),
+                    Math.abs(getFirstPoint().x - getSecondPoint().x), Math.abs(getFirstPoint().y - getSecondPoint().y));
+        } else {
+            g.drawOval(Math.min(getFirstPoint().x, getSecondPoint().x), Math.min(getFirstPoint().y, getSecondPoint().y),
+                    Math.abs(getFirstPoint().x - getSecondPoint().x), Math.abs(getFirstPoint().y - getSecondPoint().y));
+        }
+    }
+}
